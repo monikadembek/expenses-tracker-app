@@ -1,0 +1,29 @@
+.mat-toolbar {
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  
+    .title {
+      margin: 0;
+      margin-right: auto;
+    }
+  
+    .menu {
+      display: flex;
+      list-style: none;
+      
+      a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px 0 0;
+        &:hover {
+          cursor: pointer; 
+        }
+      }
+      span {
+        margin: 0 10px 0 0;
+      }
+    }
+  }

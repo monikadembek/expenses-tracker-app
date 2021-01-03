@@ -1,0 +1,5 @@
+<p>Welcome</p>
+<ng-container *ngIf="(auth$ | async) as auth">
+  <p *ngIf="auth.id">You are already logged in.</p>
+  <p *ngIf="!auth.id">Please log in to start using expenses tracker</p>
+</ng-container>
