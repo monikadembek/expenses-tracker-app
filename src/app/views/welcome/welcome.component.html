@@ -1,5 +1,7 @@
-<p>Welcome</p>
-<ng-container *ngIf="(auth$ | async) as auth">
-  <p *ngIf="auth.id">You are already logged in.</p>
-  <p *ngIf="!auth.id">Please log in to start using expenses tracker</p>
+<ng-container *ngIf="(user$ | async) as user; else loggedOut">
+  <p *ngIf="user">Welcome {{ user.email }}</p>
 </ng-container>
+<ng-template #loggedOut>
+  <p>Please log in to start using expenses tracker</p>
+  <a [routerLink]="['/login']">Log in</a>
+</ng-template>

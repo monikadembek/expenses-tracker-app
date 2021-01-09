@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+} 
+
+.header-text {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.header-container {
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin-top: 20px;
+}
+
+button[type="submit"] {
+    margin: 20px 0;
+}

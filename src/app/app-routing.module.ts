@@ -4,7 +4,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { WelcomeComponent } from './views/welcome/welcome.component';
 
 const routes: Routes = [
-  { path: '', component: WelcomeComponent }
+  { path: 'login', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
+  { path: 'welcome', component: WelcomeComponent },
+  { path: '', redirectTo: '/welcome', pathMatch: 'full' },
+  { path: '**', redirectTo: '/welcome', pathMatch: 'full' }
 ];
 
 @NgModule({

@@ -1,3 +1,5 @@
+@import '../../styles/variables.scss';
+
 .mat-toolbar {
     height: 70px;
     display: flex;
@@ -22,8 +24,16 @@
           cursor: pointer; 
         }
       }
-      span {
+      span.avatar {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
         margin: 0 10px 0 0;
+        background-color: $white-color;
+        color: $primary-color;
+        text-align: center;
+        line-height: 36px;
       }
     }
   }

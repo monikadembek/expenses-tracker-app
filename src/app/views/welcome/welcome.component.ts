@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { User } from 'src/app/auth/models/User';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
   selector: 'app-welcome',
@@ -7,13 +9,12 @@ import { Observable, of } from 'rxjs';
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
+  user$: Observable<User | null>;
 
-  auth$: Observable<any> = of(false);
-
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.auth$ = of(true);
+    this.user$ = this.authService.user$;
   }
 
 }
