@@ -7,7 +7,7 @@ import { CoreModule } from './core/core.module';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { LayoutModule } from './layout/layout.module';
-import { FeaturesModule } from './features/features.module';
+import { ExpensesModule } from './features/expenses/expenses.module';
 import { ViewsModule } from './views/views.module';
 
 import { AngularFireModule } from '@angular/fire';
@@ -31,7 +31,7 @@ import { AppComponent } from './app.component';
     AuthModule,
     SharedModule,
     LayoutModule,
-    FeaturesModule,
+    ExpensesModule,
     ViewsModule,
     AppRoutingModule
   ],
