@@ -2,18 +2,24 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { User } from '../models/User';
 import { Credentials } from '../models/Credentials';
+import { AuthStore } from '../services/auth-store';
+import { AuthState } from './auth-state';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private fireAuth: AngularFireAuth) { }
+  constructor(private fireAuth: AngularFireAuth,
+              private authStore: AuthStore) { }
 
-  get user$(): Observable<User | null> {
+  get user$(): Observable<firebase.User | null> {
     return this.fireAuth.user;
+  }
+
+  get userId(): string {
+    return this.authStore.state.uid;
   }
 
   login({ email, password }: Credentials): Promise<firebase.auth.UserCredential> {
@@ -35,5 +41,22 @@ export class AuthService {
   logout(): Promise<void> {
     return this.fireAuth.signOut();
   }
+
+  storeUserData(data: firebase.auth.UserCredential): void {
+    console.log('store user data', data);
+    const userData: AuthState = {
+      uid: data.user.uid,
+      email: data.user.email,
+      providerId: data.additionalUserInfo.providerId,
+    };
+    this.authStore.setState({...userData});
+  }
+
+  refreshUserStore(data: firebase.User): void {
+    this.authStore.setPartialState<string>('uid', data.uid);
+    console.log('refreshed user store', this.authStore.state);
+  }
+
+
 
 }

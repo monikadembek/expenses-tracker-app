@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from 'src/app/auth/models/User';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-welcome',
@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
-  user$: Observable<User | null>;
+  user$: Observable<firebase.User | null>;
 
   constructor(private authService: AuthService) { }
 

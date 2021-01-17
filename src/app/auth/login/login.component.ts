@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
-import { User } from '../models/User';
+import firebase from 'firebase/app';
 import { Credentials } from '../models/Credentials';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,23 +13,26 @@ import { Credentials } from '../models/Credentials';
 })
 export class LoginComponent implements OnInit {
 
-  form: FormGroup = this.fb.group({});
+  form: FormGroup;
   type: 'login' | 'signup' | 'reset' = 'login';
   loading = false;
   serverMessage = '';
-  user$: Observable<User | null>;
+  user$: Observable<firebase.User | null>;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService,
               private router: Router) { }
 
   ngOnInit(): void {
-    this.form = this.fb.group({
+    this.form = this.buildForm();
+  }
+
+  private buildForm(): FormGroup {
+    return this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.minLength(6), Validators.required]],
       passwordConfirm: ['', []]
     });
-    this.authService.user$.subscribe(data => console.log('user', data));
   }
 
   // changing the type of form that user chooses to fill
@@ -79,7 +82,9 @@ export class LoginComponent implements OnInit {
 
     if (this.isLogin) {
       this.authService.login(credentials)
-        .then(() => {
+        .then(data => {
+          console.log('data after login', data);
+          this.authService.storeUserData(data);
           this.router.navigate(['/welcome']);
         })
         .catch(error => this.serverMessage = error);

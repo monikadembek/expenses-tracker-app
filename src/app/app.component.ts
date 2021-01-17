@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { User } from './auth/models/User';
 import { AuthService } from './auth/services/auth.service';
 
 @Component({
@@ -11,14 +9,16 @@ import { AuthService } from './auth/services/auth.service';
 })
 export class AppComponent implements OnInit {
   title = 'Expenses Tracker';
-  user$: Observable<User | null>;
 
   constructor(private authService: AuthService,
               private router: Router) {}
 
   ngOnInit(): void {
-    this.user$ = this.authService.user$;
-    this.user$.subscribe(data => console.log('user subscribe', data));
+    // refresh user data in store
+    this.authService.user$.subscribe(data => {
+      console.log('user subscribe', data);
+      this.authService.refreshUserStore(data);
+    });
   }
 
   handleLogout(): void {

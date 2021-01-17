@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from 'src/app/auth/models/User';
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-navbar',
@@ -10,7 +10,7 @@ import { User } from 'src/app/auth/models/User';
 export class NavbarComponent {
 
   @Input()
-  user$: Observable<User | null>;
+  user$: Observable<firebase.User | null>;
 
   @Output()
   logout: EventEmitter<void> = new EventEmitter();
