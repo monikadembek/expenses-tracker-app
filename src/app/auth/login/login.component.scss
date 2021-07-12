@@ -1,3 +1,5 @@
+@import '../../styles/variables.scss';
+
 .container {
     display: flex;
     flex-direction: column;
@@ -24,4 +26,16 @@ form {
 
 button[type="submit"] {
     margin: 20px 0;
+}
+
+::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-label {
+    color: $primary-color !important;
+}
+
+::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-ripple, .mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {
+    background-color: $primary-color;
+}
+
+.mat-form-field {
+    margin-bottom: 15px;
 }

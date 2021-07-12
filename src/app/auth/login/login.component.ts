@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   loading = false;
   serverMessage = '';
   user$: Observable<firebase.User | null>;
+  mustValidate = false;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService,
@@ -35,8 +36,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  // changing the type of form that user chooses to fill
-  changeType(val: any): void {
+  changeFormType(val: any): void {
     this.type = val;
   }
 
@@ -72,31 +72,70 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  get isEmailInvalid(): boolean {
+    return this.email.invalid && this.email.dirty;
+  }
+
+  get isPasswordInvalid(): boolean {
+    return this.password.invalid && this.password.dirty;
+  }
+
+  get isPasswordConfirmInvalid(): boolean {
+    return this.passwordConfirm.dirty && !this.passwordDoesMatch;
+  }
+
+  getErrorMessage(formControlName: string): string {
+    let message = '';
+
+    if (this.form.dirty && this.mustValidate) {
+      switch (formControlName) {
+        case 'email':
+          console.log(this.email.errors);
+          if (this.isEmailInvalid) {
+            message = 'You must enter a valid email address';
+          }
+          break;
+        case 'password':
+          if (this.isPasswordInvalid) {
+            message = 'Password must be at least 6 characters long';
+          }
+          break;
+        case 'passwordConfirm':
+          if (this.isPasswordConfirmInvalid) {
+            message = 'Password does not match';
+          }
+          break;
+      }
+    }
+
+    return message;
+  }
+
   onSubmit(): void {
     this.loading = true;
+    this.mustValidate = true;
 
     const credentials: Credentials = {
       email: this.email.value,
       password: this.password.value
     };
 
-    if (this.isLogin) {
+    if (this.form.valid && this.isLogin) {
       this.authService.login(credentials)
         .then(data => {
-          console.log('data after login', data);
-          this.authService.storeUserData(data);
+          console.log('data after user logged in', data);
           this.router.navigate(['/welcome']);
         })
         .catch(error => this.serverMessage = error);
     }
-    if (this.isSignup) {
+    if (this.form.valid && this.isSignup) {
       this.authService.register(credentials)
         .then(() => {
           this.router.navigate(['/welcome']);
         })
         .catch(error => this.serverMessage = error);
     }
-    if (this.isPasswordReset) {
+    if (this.form.valid && this.isPasswordReset) {
       this.authService.resetPassword(credentials.email)
         .then(() => {
           this.serverMessage = 'Check your email';

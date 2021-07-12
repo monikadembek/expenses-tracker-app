@@ -43,12 +43,12 @@ export class AuthService {
   }
 
   storeUserData(data: firebase.auth.UserCredential): void {
-    console.log('store user data', data);
     const userData: AuthState = {
       uid: data.user.uid,
       email: data.user.email,
       providerId: data.additionalUserInfo.providerId,
     };
+    console.log('store user data', userData);
     this.authStore.setState({...userData});
   }
 
