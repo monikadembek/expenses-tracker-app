@@ -1,0 +1,11 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  & > .mat-form-field {
+    max-width: 300px;
+    width: 100%;
+  }
+}

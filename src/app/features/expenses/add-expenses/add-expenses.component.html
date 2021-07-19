@@ -1,1 +1,51 @@
-<h2>List expenses</h2>
+<h2>Add expenses</h2>
+
+<form novalidate (ngSubmit)="save(addExpenseForm)" [formGroup]="addExpenseForm" class="form" #formDirective="ngForm">
+  <mat-form-field appearance="outline">
+    <mat-label>Expense title</mat-label>
+    <input matInput type="text" placeholder="Name of expense (required)" formControlName="expenseTitle">
+    <mat-error *ngIf="addExpenseForm.get('expenseTitle').dirty && addExpenseForm.get('expenseTitle').errors?.required">
+      Title of expense is required
+    </mat-error>
+    <mat-error *ngIf="addExpenseForm.get('expenseTitle').dirty && addExpenseForm.get('expenseTitle').errors?.minlength">
+      Minimum length is 2 characters
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Value</mat-label>
+    <input matInput type="number" placeholder="value (required)" min="0" formControlName="value">
+    <mat-error *ngIf="addExpenseForm.get('value').dirty && addExpenseForm.get('value').errors?.required">
+      Value of expense is required
+    </mat-error>
+    <mat-error *ngIf="addExpenseForm.get('value').dirty && addExpenseForm.get('value').errors?.min">
+      Value can't be less than 0
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Date</mat-label>
+    <input matInput type="date" placeholder="Date (required)" formControlName="date">
+    <mat-error *ngIf="addExpenseForm.get('date').dirty && addExpenseForm.get('date').errors">
+      Date is required
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Category</mat-label>
+    <mat-select formControlName="category">
+      <mat-option *ngFor="let enum of categories | keyvalue" [value]="enum.key">{{ enum.value }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="addExpenseForm.get('category').dirty && addExpenseForm.get('category').errors">
+      Category is required
+    </mat-error>
+  </mat-form-field>
+
+  <button mat-flat-button color="primary" type="submit" [disabled]="addExpenseForm.invalid">
+    Add Expense
+  </button>
+</form>
+
+<!-- {{addExpenseForm.value | json}}<br>
+{{addExpenseForm.get('value').status | json}}<br>
+{{addExpenseForm.status | json}} -->
