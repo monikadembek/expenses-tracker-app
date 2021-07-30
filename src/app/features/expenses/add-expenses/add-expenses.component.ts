@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormGroupDirective, AbstractControl } from '@angular/forms';
+import * as firebase from 'firebase/app';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Expense } from '../models/Expense';
@@ -78,14 +79,15 @@ export class AddExpensesComponent implements OnInit, OnDestroy {
   save(form: FormGroup): void {
     console.log('form', form.value);
     if (form.dirty && form.valid) {
+      const timestampDate = firebase.default.firestore.Timestamp.fromDate(new Date(form.value.date));
       const expense: Expense = {
         ...form.value,
-        // date: new Date(form.value.date)
+        date: timestampDate
       };
       this.expensesService.addExpense(expense)
         .pipe(takeUntil(this.unSubscribe$))
         .subscribe(data => {
-          console.log('data from add do db', data);
+          console.log('data added to db', data);
           if (data) {
             this.formDirective.resetForm(this.initialFormData);
           }

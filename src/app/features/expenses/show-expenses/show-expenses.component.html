@@ -1,2 +1,20 @@
 <h2>List expenses</h2>
-
+<mat-list>
+  <mat-list-item *ngFor="let expense of expenses$ | async; let i = index;">
+    <div class="item">
+      <div class="item__description">
+        <div class="item__line">
+          <span class="item__date">{{expense.date.toDate() | date:"dd-MM-yyyy" }}</span>
+          <strong class="item__value">{{ expense.value }}</strong>
+          <span class="item__title"v>{{expense.expenseTitle}}</span>
+        </div> 
+        <div class="item__line">Category: {{ expense.category }}</div>
+      </div>
+      <div class="item__buttons-container">
+        <button mat-icon-button (click)="delete(expense.id)">
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-list-item>
+</mat-list>

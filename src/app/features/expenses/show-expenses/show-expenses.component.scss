@@ -1,0 +1,35 @@
+@import '../../../styles/variables.scss';
+
+.item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 15px;
+
+  &__line:first-child {
+    margin-bottom: 10px;
+  }
+
+  &__date, &__value {
+    display: inline-block;
+    width: 100px;
+  }
+
+  &__value {
+    display: inline-block;
+    width: 50px;
+  }
+
+}
+
+::ng-deep .mat-list-item {
+  height: auto !important;
+  width: 90%;
+  max-width: 1000px;
+  border-bottom: 1px solid $primary-color;
+
+  &:nth-child(odd) {
+    background-color: $primary-color-100;
+  }
+}

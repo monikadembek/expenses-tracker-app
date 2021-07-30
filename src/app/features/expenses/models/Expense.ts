@@ -1,9 +1,10 @@
 import { ExpenseCategory } from './ExpenseCategory';
 
 export interface Expense {
+  id?: string;
   title: string;
   value: number;
-  date: Date;
+  date: any;
   category: ExpenseCategory;
   uid: string;
 }
