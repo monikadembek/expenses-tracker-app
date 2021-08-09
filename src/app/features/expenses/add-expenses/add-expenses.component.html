@@ -3,8 +3,8 @@
 <form novalidate (ngSubmit)="save(addExpenseForm)" [formGroup]="addExpenseForm" class="form" #formDirective="ngForm">
   <mat-form-field appearance="outline">
     <mat-label>Expense title</mat-label>
-    <input matInput type="text" placeholder="Name of expense (required)" formControlName="expenseTitle">
-    <mat-error *ngIf="!isTitleValid">{{ getErrorMsg('expenseTitle') }}</mat-error>
+    <input matInput type="text" placeholder="Name of expense (required)" formControlName="title">
+    <mat-error *ngIf="!isTitleValid">{{ getErrorMsg('title') }}</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline">

@@ -17,10 +17,10 @@ export class AddExpensesComponent implements OnInit, OnDestroy {
   categories = ExpenseCategory;
   unSubscribe$: Subject<void> = new Subject();
 
-  initialDate = new Date().toLocaleString().split(',')[0].split('.').reverse().join('-');
+  initialDate = this.prepareDateInputFormat(new Date());
 
   initialFormData: any = {
-    expenseTitle: '',
+    title: '',
     value: 0,
     date: this.initialDate,
     category: 'other'
@@ -29,7 +29,7 @@ export class AddExpensesComponent implements OnInit, OnDestroy {
   @ViewChild(FormGroupDirective) formDirective: FormGroupDirective;
 
   get expenseTitle(): AbstractControl {
-    return this.addExpenseForm.get('expenseTitle');
+    return this.addExpenseForm.get('title');
   }
 
   get expenseValue(): AbstractControl {
@@ -69,11 +69,18 @@ export class AddExpensesComponent implements OnInit, OnDestroy {
 
   private buildForm(): void {
     this.addExpenseForm = this.fb.group({
-      expenseTitle: ['', [Validators.required]],
+      title: ['', [Validators.required]],
       value: [0, [Validators.required, Validators.min(0)]],
       date: [this.initialDate, [Validators.required]],
       category: ['other', [Validators.required]]
     });
+  }
+
+  private prepareDateInputFormat(date: Date): string {
+    const dateInput = date.toLocaleString().split(',')[0].split('.');
+    dateInput[0] = +dateInput[0] < 10 ? `0${dateInput[0]}` : dateInput[0];
+    dateInput.reverse();
+    return dateInput.join('-');
   }
 
   save(form: FormGroup): void {
@@ -98,7 +105,7 @@ export class AddExpensesComponent implements OnInit, OnDestroy {
   getErrorMsg(control: string): string {
     let errorMsg = '';
     switch (control) {
-      case 'expenseTitle':
+      case 'title':
         if (!this.isTitleValid) {
           errorMsg = 'Please enter title of expense';
         }
