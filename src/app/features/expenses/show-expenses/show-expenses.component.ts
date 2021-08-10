@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, of, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Expense } from '../models/Expense';
 import { ExpensesService } from '../services/expenses.service';
 
@@ -8,8 +9,9 @@ import { ExpensesService } from '../services/expenses.service';
   templateUrl: './show-expenses.component.html',
   styleUrls: ['./show-expenses.component.scss']
 })
-export class ShowExpensesComponent implements OnInit {
+export class ShowExpensesComponent implements OnInit, OnDestroy {
 
+  unSubscribe$: Subject<void> = new Subject();
   expenses$: Observable<Expense[]> = of([]);
   expenseIndex: number = null;
   isFormDisplayed = false;
@@ -23,7 +25,9 @@ export class ShowExpensesComponent implements OnInit {
   }
 
   getExpenses(): void {
-    this.expensesService.requestExpenses().subscribe();
+    this.expensesService.requestExpenses()
+      .pipe(takeUntil(this.unSubscribe$))
+      .subscribe();
   }
 
   delete(id: string): void {
@@ -31,7 +35,6 @@ export class ShowExpensesComponent implements OnInit {
   }
 
   toggleForm(index: number): void {
-    console.log('*should display modify form: ', this.isFormDisplayed, '  index: ', index);
     if ((this.expenseIndex === null || this.expenseIndex !== index) && this.isFormDisplayed === false) {
       this.isFormDisplayed = true;
     } else if (this.expenseIndex === index) {
@@ -46,6 +49,11 @@ export class ShowExpensesComponent implements OnInit {
 
   cancel(): void {
     this.isFormDisplayed = false;
+  }
+
+  ngOnDestroy(): void {
+    this.unSubscribe$.next();
+    this.unSubscribe$.complete();
   }
 
 }

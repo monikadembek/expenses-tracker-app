@@ -51,7 +51,6 @@ export class ModifyExpenseFormComponent implements OnInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    console.log('*modify - expense', this.expense);
     this.buildForm();
   }
 
