@@ -6,10 +6,15 @@ import { MaterialModule } from '../../material/material.module';
 import { ExpensesRoutingModule } from './expenses-routing.module';
 import { ShowExpensesComponent } from './show-expenses/show-expenses.component';
 import { AddExpensesComponent } from './add-expenses/add-expenses.component';
+import { ModifyExpenseFormComponent } from './modify-expense-form/modify-expense-form.component';
 
 
 @NgModule({
-  declarations: [ShowExpensesComponent, AddExpensesComponent],
+  declarations: [
+    ShowExpensesComponent,
+    AddExpensesComponent,
+    ModifyExpenseFormComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,

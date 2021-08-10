@@ -1,0 +1,37 @@
+<form novalidate (ngSubmit)="save(form)" [formGroup]="form" class="form" #formDirective="ngForm">
+  <mat-form-field appearance="outline">
+    <mat-label>Expense title</mat-label>
+    <input matInput type="text" placeholder="Name of expense (required)" formControlName="title">
+    <mat-error *ngIf="!isTitleValid">{{ getErrorMsg('title') }}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Value</mat-label>
+    <input matInput type="number" placeholder="value (required)" min="0" formControlName="value">
+    <mat-error *ngIf="!isValueValid">{{ getErrorMsg('value') }}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Date</mat-label>
+    <input matInput type="date" placeholder="Date (required)" formControlName="date">
+    <mat-error *ngIf="!isDateValid">{{ getErrorMsg('date') }}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Category</mat-label>
+    <mat-select formControlName="category">
+      <mat-option *ngFor="let enum of categories | keyvalue" [value]="enum.key">{{ enum.value }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="!isCategoryValid">{{ getErrorMsg('category') }}</mat-error>
+  </mat-form-field>
+
+  <div class="buttons-container">
+    <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+      Save
+    </button>
+    <button type="button" mat-flat-button color="primary" (click)="cancel()">
+      Cancel
+    </button>
+  </div>
+</form>
+  

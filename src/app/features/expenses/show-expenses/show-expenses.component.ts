@@ -11,6 +11,8 @@ import { ExpensesService } from '../services/expenses.service';
 export class ShowExpensesComponent implements OnInit {
 
   expenses$: Observable<Expense[]> = of([]);
+  expenseIndex: number = null;
+  isFormDisplayed = false;
 
   constructor(private expensesService: ExpensesService) {
     this.getExpenses();
@@ -26,6 +28,24 @@ export class ShowExpensesComponent implements OnInit {
 
   delete(id: string): void {
     this.expensesService.deleteExpense(id);
+  }
+
+  toggleForm(index: number): void {
+    console.log('*should display modify form: ', this.isFormDisplayed, '  index: ', index);
+    if ((this.expenseIndex === null || this.expenseIndex !== index) && this.isFormDisplayed === false) {
+      this.isFormDisplayed = true;
+    } else if (this.expenseIndex === index) {
+      this.isFormDisplayed = !this.isFormDisplayed;
+    }
+    this.expenseIndex = index;
+  }
+
+  shouldShowForm(index: number): boolean {
+    return this.isFormDisplayed === true && this.expenseIndex === index;
+  }
+
+  cancel(): void {
+    this.isFormDisplayed = false;
   }
 
 }

@@ -1,0 +1,11 @@
+.buttons-container {
+  margin-bottom: 30px;
+
+  & button:not(:last-child) {
+    margin-right: 10px;
+  }
+}
+
+.mat-form-field:not(:last-child) {
+  margin-right: 10px; 
+}
