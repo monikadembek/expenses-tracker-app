@@ -51,6 +51,10 @@ export class ShowExpensesComponent implements OnInit, OnDestroy {
     this.isFormDisplayed = false;
   }
 
+  handleExpenseUpdate(): void {
+    this.getExpenses();
+  }
+
   ngOnDestroy(): void {
     this.unSubscribe$.next();
     this.unSubscribe$.complete();

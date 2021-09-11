@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="item__modify-form" *ngIf="shouldShowForm(i)">
-        <app-modify-expense-form [expense]="expense" (cancelFormChanges)="cancel()"></app-modify-expense-form>
+        <app-modify-expense-form [expense]="expense" (cancelFormChanges)="cancel()" (expenseUpdated)="handleExpenseUpdate()"></app-modify-expense-form>
       </div>
     </div>
   </mat-list-item>

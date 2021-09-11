@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { Expense } from '../models/Expense';
 import { DocumentReference } from '@angular/fire/firestore';
 import { AuthService } from '../../../auth/services/auth.service';
@@ -55,6 +55,29 @@ export class ExpensesService {
   private updateExpensesInStore(id: string): void {
     const filteredOutExpenses = this.expensesStore.state.expenses.filter(expense => expense.id !== id);
     this.expensesStore.setPartialState<Expense[]>('expenses', filteredOutExpenses);
+  }
+
+  modifyExpense(id: string, changes: Expense): Observable<Expense | string> {
+    console.log('changes - service', changes, id);
+    return from(this.dataAccessService.updateExpenseInDb(id, changes)
+      .then(data => {
+        this.updateExpensesInStoreAfterModify(id, changes);
+        return changes;
+      })
+      .catch(error => {
+        console.log('Error while modyfing expense: ', error);
+        return `Error while modyfing expense: $error.message`;
+      }));
+  }
+
+  private updateExpensesInStoreAfterModify(id: string, changes: Expense): void {
+    const updatedExpenses = this.expensesStore.state.expenses.map(expense => {
+      if (expense.id === id) {
+        expense = changes;
+      }
+      return expense;
+    });
+    this.expensesStore.setPartialState<Expense[]>('expense', updatedExpenses);
   }
 
 }

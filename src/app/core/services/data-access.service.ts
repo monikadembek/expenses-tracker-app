@@ -15,7 +15,7 @@ export class DataAccessService {
 
   addExpenseToDb(expense: Partial<Expense>): Observable<DocumentReference<unknown>> | Observable<any> {
     return from(this.afs.collection('expenses').add(expense))
-      .pipe(catchError(error => of(`Error occured: ${error}`)));
+      .pipe(catchError(error => of(`Error occured while saving new expense: ${error}`)));
   }
 
   getExpensesFromDb(uid: string): Observable<Expense[]> {
@@ -38,6 +38,10 @@ export class DataAccessService {
 
   deleteExpenseFromDb(id: string): Promise<void> {
     return this.afs.doc(`expenses/${id}`).delete();
+  }
+
+  updateExpenseInDb(id: string, changes: Expense): Promise<void> {
+    return this.afs.doc(`expenses/${id}`).update(changes);
   }
 
 }

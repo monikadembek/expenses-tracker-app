@@ -1,20 +1,26 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import firebase from 'firebase/app';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Expense } from '../models/Expense';
 import { ExpenseCategory } from '../models/ExpenseCategory';
+import { ExpensesService } from '../services/expenses.service';
 
 @Component({
   selector: 'app-modify-expense-form',
   templateUrl: './modify-expense-form.component.html',
   styleUrls: ['./modify-expense-form.component.scss']
 })
-export class ModifyExpenseFormComponent implements OnInit {
+export class ModifyExpenseFormComponent implements OnInit, OnDestroy {
+
+  unSubscribe$: Subject<void> = new Subject();
   form: FormGroup;
   categories = ExpenseCategory;
 
   @Input() expense: Expense;
   @Output() cancelFormChanges: EventEmitter<void> = new EventEmitter<void>();
+  @Output() expenseUpdated: EventEmitter<void> = new EventEmitter<void>();
 
   get expenseTitle(): AbstractControl {
     return this.form.get('title');
@@ -48,7 +54,8 @@ export class ModifyExpenseFormComponent implements OnInit {
     return this.expenseCategory.dirty && this.expenseCategory.valid;
   }
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,
+              private expensesService: ExpensesService) { }
 
   ngOnInit(): void {
     this.buildForm();
@@ -71,9 +78,28 @@ export class ModifyExpenseFormComponent implements OnInit {
     return dateInput.join('-');
   }
 
-
-  save(form: FormGroup): void {
+  update(form: FormGroup): void {
     console.log('save modified form', form);
+    if (form.dirty && form.valid) {
+      const timestampDate = firebase.firestore.Timestamp.fromDate(new Date(form.value.date));
+      const expense: Expense = {
+        ...form.value,
+        date: timestampDate
+      };
+      this.expensesService.modifyExpense(this.expense.id, expense)
+        .pipe(takeUntil(this.unSubscribe$))
+        .subscribe(data => {
+          console.log('data updated in db', data);
+          if (data) {
+            if (typeof data === 'object') {
+              console.log('update expenses list');
+              this.expenseUpdated.emit();
+            }
+            console.log(typeof data);
+            this.cancel();
+          }
+        });
+    }
   }
 
   cancel(): void {
@@ -110,6 +136,11 @@ export class ModifyExpenseFormComponent implements OnInit {
         errorMsg = '';
     }
     return errorMsg;
+  }
+
+  ngOnDestroy(): void {
+    this.unSubscribe$.next();
+    this.unSubscribe$.complete();
   }
 
 }
