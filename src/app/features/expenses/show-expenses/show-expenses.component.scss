@@ -43,3 +43,12 @@
     background-color: $primary-color-100;
   }
 }
+
+.sum-container {
+  margin: 20px 0;
+  font-weight: 500;
+  .sum {
+    font-weight: bold;
+    font-size: 18px;
+  }
+}

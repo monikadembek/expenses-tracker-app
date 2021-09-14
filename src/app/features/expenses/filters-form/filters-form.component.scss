@@ -1,0 +1,25 @@
+.container {
+  margin-bottom: 15px;
+}
+.header {
+  font-weight: 500;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  & > *:not(:last-child) {
+    margin-right: 10px;
+  }
+}
+
+.submitBtn {
+  transform: translateY(-7px);
+}
+
+.error-msg {
+  font-size: 12px;
+  margin-top: -10px;
+}

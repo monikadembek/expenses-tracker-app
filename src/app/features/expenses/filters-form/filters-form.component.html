@@ -1,0 +1,28 @@
+<div class="container">
+  <h3 class="header">Set expenses filters</h3>
+  <form [formGroup]="form" (ngSubmit)="submit(form)" class="form"> 
+    <mat-form-field appearance="outline">
+      <mat-label>From date</mat-label>
+      <input matInput [matDatepicker]="startDate" formControlName="startDate">
+      <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+      <mat-datepicker #startDate disabled="false"></mat-datepicker>
+      <mat-error *ngIf="!isStartDateValid">{{ getErrorMessage('startDate') }}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>To date</mat-label>
+      <input matInput [matDatepicker]="endDate" formControlName="endDate">
+      <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+      <mat-datepicker #endDate disabled="false"></mat-datepicker>
+      <mat-error *ngIf="!isEndDateValid">{{ getErrorMessage('endDate') }}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Category</mat-label>
+      <mat-select formControlName="category">
+        <mat-option [value]="null">All</mat-option>
+        <mat-option *ngFor="let enum of categories | keyvalue" [value]="enum.key">{{ enum.value }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-flat-button color="primary" type="submit" class="submitBtn" [disabled]="form.invalid && form.dirty">Search</button>
+  </form>
+  <mat-error *ngIf="shouldShowFormErrors" class="error-msg">{{ getErrorMessage() }}</mat-error>
+</div>
