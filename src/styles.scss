@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@import './app/styles/variables.scss';
+
 *, *::before, *::after {
   box-sizing: inherit;
 }
@@ -6,7 +8,24 @@ html, body {
   box-sizing: border-box;
   height: 100%; 
 }
+
 body { 
   margin: 0; 
   font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
+
+.custom-snackbar {
+  color:#ffffff !important;
+
+  * .mat-button-wrapper {
+    color: #ffffff !important;
+  }
+}
+
+.success-snackbar { 
+  background: $color-green !important; 
+}
+
+.warning-snackbar { 
+  background: $color-red !important;
 }

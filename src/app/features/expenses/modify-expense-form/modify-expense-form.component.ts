@@ -3,6 +3,8 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import firebase from 'firebase/app';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { SnackbarMessageType } from 'src/app/shared/shared-models';
+import { SnackbarService } from 'src/app/shared/snackbar.service';
 import { Expense } from '../models/Expense';
 import { ExpenseCategory } from '../models/ExpenseCategory';
 import { ExpensesService } from '../services/expenses.service';
@@ -55,7 +57,8 @@ export class ModifyExpenseFormComponent implements OnInit, OnDestroy {
   }
 
   constructor(private fb: FormBuilder,
-              private expensesService: ExpensesService) { }
+              private expensesService: ExpensesService,
+              private snackbarService: SnackbarService) { }
 
   ngOnInit(): void {
     this.buildForm();
@@ -94,6 +97,7 @@ export class ModifyExpenseFormComponent implements OnInit, OnDestroy {
             if (typeof data === 'object') {
               console.log('update expenses list');
               this.expenseUpdated.emit();
+              this.snackbarService.displaySnackbarMessage('Expense has been modified', SnackbarMessageType.Success);
             }
             console.log(typeof data);
             this.cancel();

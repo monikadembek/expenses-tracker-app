@@ -6,6 +6,8 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { DataAccessService } from '../../../core/services/data-access.service';
 import { concatMap, map, switchMap } from 'rxjs/operators';
 import { ExpensesStore } from './expenses-store';
+import { SnackbarService } from 'src/app/shared/snackbar.service';
+import { SnackbarMessageType } from 'src/app/shared/shared-models';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,8 @@ export class ExpensesService {
 
   constructor(private authService: AuthService,
               private dataAccessService: DataAccessService,
-              private expensesStore: ExpensesStore) { }
+              private expensesStore: ExpensesStore,
+              private snackbarService: SnackbarService) { }
 
   addExpense(expense: Partial<Expense>): Observable<DocumentReference<unknown> | string> {
     let expenseData = null;
@@ -48,8 +51,14 @@ export class ExpensesService {
 
   deleteExpense(id: string): void {
     this.dataAccessService.deleteExpenseFromDb(id)
-    .then(data => this.updateExpensesInStore(id))
-    .catch(error => console.log(error));
+    .then(data => {
+      this.updateExpensesInStore(id);
+      this.snackbarService.displaySnackbarMessage('Expense has been deleted', SnackbarMessageType.Success);
+    })
+    .catch(error => {
+      console.log(error);
+      this.snackbarService.displaySnackbarMessage(`Error occured: ${error}`, SnackbarMessageType.Warning);
+    });
   }
 
   private updateExpensesInStore(id: string): void {

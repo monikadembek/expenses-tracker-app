@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators, FormGroupDirective, AbstractControl
 import * as firebase from 'firebase/app';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { SnackbarMessageType } from 'src/app/shared/shared-models';
+import { SnackbarService } from 'src/app/shared/snackbar.service';
 import { Expense } from '../models/Expense';
 import { ExpenseCategory } from '../models/ExpenseCategory';
 import { ExpensesService } from '../services/expenses.service';
@@ -61,7 +63,8 @@ export class AddExpensesComponent implements OnInit, OnDestroy {
   }
 
   constructor(private expensesService: ExpensesService,
-              private fb: FormBuilder) { }
+              private fb: FormBuilder,
+              private snackbarService: SnackbarService) { }
 
   ngOnInit(): void {
     this.buildForm();
@@ -98,6 +101,7 @@ export class AddExpensesComponent implements OnInit, OnDestroy {
           if (data) {
             this.formDirective.resetForm(this.initialFormData);
           }
+          this.snackbarService.displaySnackbarMessage('Expense has been added', SnackbarMessageType.Success);
         });
     }
   }
