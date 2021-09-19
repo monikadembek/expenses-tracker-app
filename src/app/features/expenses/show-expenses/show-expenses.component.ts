@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
+import { DialogService } from 'src/app/shared/services/dialog.service';
 import { Expense } from '../models/Expense';
 import { Filters } from '../models/Filters';
 import { ExpensesService } from '../services/expenses.service';
@@ -22,8 +23,10 @@ export class ShowExpensesComponent implements OnInit, OnDestroy {
     startDate: new Date(),
     endDate: new Date(Date.now() - (30 * 24 * 60 * 60 * 1000))
   };
+  dialogDeleteMessage = 'Do you want to delete this expense?';
 
-  constructor(private expensesService: ExpensesService) {
+  constructor(private expensesService: ExpensesService,
+              private dialogService: DialogService) {
     this.getExpenses();
   }
 
@@ -59,7 +62,12 @@ export class ShowExpensesComponent implements OnInit, OnDestroy {
   }
 
   delete(id: string): void {
-    this.expensesService.deleteExpense(id);
+    this.dialogService.displayConfirmationDialog(this.dialogDeleteMessage)
+      .afterClosed().subscribe((result: boolean) => {
+        if (result === true) {
+          this.expensesService.deleteExpense(id);
+        }
+      });
   }
 
   toggleForm(index: number): void {
