@@ -5,9 +5,10 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SnackbarMessageType } from 'src/app/shared/shared-models';
 import { SnackbarService } from 'src/app/shared/snackbar.service';
-import { Expense } from '../models/Expense';
+import { Expense, FinanceTypeEnum } from '../models/Expense';
 import { ExpenseCategory } from '../models/ExpenseCategory';
 import { ExpensesService } from '../services/expenses.service';
+
 
 @Component({
   selector: 'app-add-expenses',
@@ -23,6 +24,7 @@ export class AddExpensesComponent implements OnInit, OnDestroy {
 
   initialFormData: any = {
     title: '',
+    type: FinanceTypeEnum.EXPENSE,
     value: 0,
     date: this.initialDate,
     category: 'other'
@@ -32,6 +34,10 @@ export class AddExpensesComponent implements OnInit, OnDestroy {
 
   get expenseTitle(): AbstractControl {
     return this.addExpenseForm.get('title');
+  }
+
+  get expenseType(): AbstractControl {
+    return this.addExpenseForm.get('type');
   }
 
   get expenseValue(): AbstractControl {
@@ -62,20 +68,34 @@ export class AddExpensesComponent implements OnInit, OnDestroy {
     return this.expenseCategory.dirty && this.expenseCategory.valid;
   }
 
+  get shouldDisplayCategory(): boolean {
+    return this.addExpenseForm.get('type').value === 'expense';
+  }
+
   constructor(private expensesService: ExpensesService,
               private fb: FormBuilder,
               private snackbarService: SnackbarService) { }
 
   ngOnInit(): void {
     this.buildForm();
+    this.expenseType.valueChanges
+      .pipe(takeUntil(this.unSubscribe$))
+      .subscribe(value => {
+        if (value === FinanceTypeEnum.INCOME) {
+          this.expenseCategory.setValue(null);
+        } else {
+          this.expenseCategory.setValue('other');
+        }
+      });
   }
 
   private buildForm(): void {
     this.addExpenseForm = this.fb.group({
       title: ['', [Validators.required]],
+      type: [FinanceTypeEnum.EXPENSE, [Validators.required]],
       value: [0, [Validators.required, Validators.min(0)]],
       date: [this.initialDate, [Validators.required]],
-      category: ['other', [Validators.required]]
+      category: ['other']
     });
   }
 
@@ -97,13 +117,15 @@ export class AddExpensesComponent implements OnInit, OnDestroy {
       this.expensesService.addExpense(expense)
         .pipe(takeUntil(this.unSubscribe$))
         .subscribe(data => {
-          console.log('data added to db', data);
-          if (data) {
-            this.formDirective.resetForm(this.initialFormData);
-          }
-          this.snackbarService.displaySnackbarMessage('Expense has been added', SnackbarMessageType.Success);
+          console.log('form in subscribe', form.value);
+          this.snackbarService.displaySnackbarMessage(this.getSnackbarMessage(form.value.type), SnackbarMessageType.Success);
+          this.formDirective.resetForm(this.initialFormData);
         });
     }
+  }
+
+  private getSnackbarMessage(type: string): string {
+    return type[0].toUpperCase() + type.slice(1) + ' has been added';
   }
 
   getErrorMsg(control: string): string {
