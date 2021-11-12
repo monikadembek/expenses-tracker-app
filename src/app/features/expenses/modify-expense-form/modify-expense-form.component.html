@@ -1,4 +1,17 @@
 <form novalidate (ngSubmit)="update(form)" [formGroup]="form" class="form" #formDirective="ngForm">
+  <div class="radio-group">
+    <label id="type">Type:</label>
+    <mat-radio-group formControlName="type"
+      aria-labelledby="type" class="radio-group">
+      <mat-radio-button value="expense">
+        Expense
+      </mat-radio-button>
+      <mat-radio-button value="income">
+        Income
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+  
   <mat-form-field appearance="outline">
     <mat-label>Expense title</mat-label>
     <input matInput type="text" placeholder="Name of expense (required)" formControlName="title">
@@ -17,7 +30,7 @@
     <mat-error *ngIf="!isDateValid">{{ getErrorMsg('date') }}</mat-error>
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" *ngIf="shouldDisplayCategory">
     <mat-label>Category</mat-label>
     <mat-select formControlName="category">
       <mat-option *ngFor="let enum of categories | keyvalue" [value]="enum.key">{{ enum.value }}</mat-option>

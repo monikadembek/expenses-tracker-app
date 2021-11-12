@@ -13,6 +13,19 @@
   & > *:not(:last-child) {
     margin-right: 10px;
   }
+
+
+  .radio-group {
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+    .mat-radio-button {
+      margin-right: 20px;
+    }
+    label {
+      margin-right: 10px;
+    }
+  }
 }
 
 .submitBtn {

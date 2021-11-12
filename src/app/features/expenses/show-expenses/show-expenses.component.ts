@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { DialogService } from 'src/app/shared/services/dialog.service';
-import { Expense } from '../models/Expense';
+import { Expense, FinanceTypeEnum } from '../models/Expense';
 import { Filters } from '../models/Filters';
 import { ExpensesService } from '../services/expenses.service';
 
@@ -19,6 +19,7 @@ export class ShowExpensesComponent implements OnInit, OnDestroy {
   isFormDisplayed = false;
   sum = 0;
   initialFilters: Filters = {
+    type: 'all',
     category: null,
     startDate: new Date(),
     endDate: new Date(Date.now() - (30 * 24 * 60 * 60 * 1000))
@@ -38,21 +39,44 @@ export class ShowExpensesComponent implements OnInit, OnDestroy {
     return this.expensesService.expenses$.pipe(
       filter((expenses: Expense[]) => expenses.length > 0),
       map((expenses: Expense[]) => {
+        if (filters.type === 'all') {
+          return expenses;
+        }
+        return expenses.filter(expense => expense.type === filters.type);
+      }),
+      map((expenses: Expense[]) => {
         if (filters.category !== null) {
           return expenses.filter(expense => expense.category === filters.category);
         }
         return expenses;
       }),
       map((expenses: Expense[]) => {
-        return expenses.filter(expense => (expense.date.seconds * 1000) <= filters.startDate.getTime() 
-        && (expense.date.seconds * 1000) >= filters.endDate.getTime());
+        return expenses.filter(expense => (expense.date.seconds * 1000) <= filters.startDate.getTime()
+          && (expense.date.seconds * 1000) >= filters.endDate.getTime());
       }),
       map(expenses => {
-        const values = expenses.map(expense => expense.value);
-        this.sum = values.reduce((acc, curr) => acc + curr, 0);
+        this.sum = this.getSumOfDisplayedExpenses(expenses, filters.type);
         return expenses;
       })
     );
+  }
+
+  private getSumOfDisplayedExpenses(expenses: Expense[], financeType: FinanceTypeEnum | 'all'): number {
+    let sum = 0;
+    if (financeType === FinanceTypeEnum.INCOME || financeType === FinanceTypeEnum.EXPENSE) {
+      const values = expenses.map(expense => expense.value);
+      sum = values.reduce((acc, curr) => acc + curr, 0);
+    } else {
+      const incomeSum = this.getSum(expenses, FinanceTypeEnum.INCOME);
+      const expensesSum = this.getSum(expenses, FinanceTypeEnum.EXPENSE);
+      sum = incomeSum - expensesSum;
+    }
+    return sum;
+  }
+
+  private getSum(expenses: Expense[], type: FinanceTypeEnum): number {
+    const values = expenses.map(expense => expense.type === type ? expense.value : 0);
+    return values.reduce((acc, curr) => acc + curr, 0);
   }
 
   private getExpenses(): void {

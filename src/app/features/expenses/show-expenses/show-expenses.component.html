@@ -7,10 +7,11 @@
         <div class="item__description">
           <div class="item__line">
             <span class="item__date">{{ expense.date.toDate() | date:"dd-MM-yyyy" }}</span>
+            <span class="item__type">{{ expense.type }}</span>
             <strong class="item__value">{{ expense.value }}</strong>
             <span class="item__title">{{ expense.title }}</span>
           </div> 
-          <div class="item__line">Category: {{ expense.category }}</div>
+          <div class="item__line" *ngIf="expense.category">Category: {{ expense.category }}</div>
         </div>
         <div class="item__buttons-container">
           <button mat-icon-button (click)="toggleForm(i)">
@@ -29,5 +30,5 @@
   </mat-list-item>
 </mat-list>
 <div class="sum-container">
-  <p>Sum of displayed expenses: <span class="sum">{{sum}}</span></p>
+  <p>Finance status: <span class="sum">{{sum}}</span></p>
 </div>

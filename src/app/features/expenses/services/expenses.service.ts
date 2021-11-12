@@ -86,7 +86,7 @@ export class ExpensesService {
       }
       return expense;
     });
-    this.expensesStore.setPartialState<Expense[]>('expense', updatedExpenses);
+    this.expensesStore.setPartialState<Expense[]>('expenses', updatedExpenses);
   }
 
 }

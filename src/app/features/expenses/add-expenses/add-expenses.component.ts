@@ -69,7 +69,7 @@ export class AddExpensesComponent implements OnInit, OnDestroy {
   }
 
   get shouldDisplayCategory(): boolean {
-    return this.addExpenseForm.get('type').value === 'expense';
+    return this.addExpenseForm.get('type').value === FinanceTypeEnum.EXPENSE;
   }
 
   constructor(private expensesService: ExpensesService,

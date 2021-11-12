@@ -1,6 +1,21 @@
 <div class="container">
-  <h3 class="header">Set expenses filters</h3>
+  <h3 class="header">Filter finances</h3>
   <form [formGroup]="form" (ngSubmit)="submit(form)" class="form"> 
+    <div class="radio-group">
+      <label id="type">Type:</label>
+      <mat-radio-group formControlName="type"
+        aria-labelledby="type" class="radio-group" (change)="onExpenseTypeChange($event)">
+        <mat-radio-button value="all">
+          All
+        </mat-radio-button>
+        <mat-radio-button value="expense">
+          Expense
+        </mat-radio-button>
+        <mat-radio-button value="income">
+          Income
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
     <mat-form-field appearance="outline">
       <mat-label>From date</mat-label>
       <input matInput [matDatepicker]="startDate" formControlName="startDate">
@@ -15,7 +30,7 @@
       <mat-datepicker #endDate disabled="false"></mat-datepicker>
       <mat-error *ngIf="!isEndDateValid">{{ getErrorMessage('endDate') }}</mat-error>
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" *ngIf="shoulDisplayCategorySelect">
       <mat-label>Category</mat-label>
       <mat-select formControlName="category">
         <mat-option [value]="null">All</mat-option>

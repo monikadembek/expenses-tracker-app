@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SnackbarMessageType } from 'src/app/shared/shared-models';
 import { SnackbarService } from 'src/app/shared/snackbar.service';
-import { Expense } from '../models/Expense';
+import { Expense, FinanceTypeEnum } from '../models/Expense';
 import { ExpenseCategory } from '../models/ExpenseCategory';
 import { ExpensesService } from '../services/expenses.service';
 
@@ -26,6 +26,10 @@ export class ModifyExpenseFormComponent implements OnInit, OnDestroy {
 
   get expenseTitle(): AbstractControl {
     return this.form.get('title');
+  }
+
+  get expenseType(): AbstractControl {
+    return this.form.get('type');
   }
 
   get expenseValue(): AbstractControl {
@@ -56,20 +60,35 @@ export class ModifyExpenseFormComponent implements OnInit, OnDestroy {
     return this.expenseCategory.dirty && this.expenseCategory.valid;
   }
 
+  get shouldDisplayCategory(): boolean {
+    return this.form.get('type').value === FinanceTypeEnum.EXPENSE;
+  }
+
   constructor(private fb: FormBuilder,
               private expensesService: ExpensesService,
               private snackbarService: SnackbarService) { }
 
   ngOnInit(): void {
     this.buildForm();
+
+    this.expenseType.valueChanges
+      .pipe(takeUntil(this.unSubscribe$))
+      .subscribe(value => {
+        if (value === FinanceTypeEnum.INCOME) {
+          this.expenseCategory.setValue(null);
+        } else {
+          this.expenseCategory.setValue('other');
+        }
+      });
   }
 
   private buildForm(): void {
     this.form = this.fb.group({
       title: [this.expense.title, [Validators.required]],
+      type: [this.expense.type, [Validators.required]],
       value: [this.expense.value, [Validators.required, Validators.min(0)]],
       date: [this.prepareDateInputFormat(this.expense.date), [Validators.required]],
-      category: [this.expense.category, [Validators.required]]
+      category: [this.expense.category]
     });
   }
 
@@ -89,6 +108,7 @@ export class ModifyExpenseFormComponent implements OnInit, OnDestroy {
         ...form.value,
         date: timestampDate
       };
+      console.log('modified expense', expense);
       this.expensesService.modifyExpense(this.expense.id, expense)
         .pipe(takeUntil(this.unSubscribe$))
         .subscribe(data => {

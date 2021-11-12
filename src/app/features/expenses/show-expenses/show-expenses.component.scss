@@ -27,9 +27,15 @@
     width: 50px;
   }
 
+  &__type {
+    display: inline-block;
+    width: 80px;
+  }
+
   &__modify-form {
     width: 100%;
-    padding: 0px 0px 0px 5px;
+    padding: 25px 0px 0px 5px;
+    border-top: 1px solid rgba($primary-color, 0.5); 
   }
 }
 

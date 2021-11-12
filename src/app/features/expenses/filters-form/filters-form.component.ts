@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { MatRadioChange } from '@angular/material/radio';
 import { Filters } from '../models/Filters';
 import { ExpenseCategory } from '../models/ExpenseCategory';
+import { FinanceTypeEnum } from '../models/Expense';
 
 @Component({
   selector: 'filters-form',
@@ -15,6 +17,7 @@ export class FiltersFormComponent implements OnInit {
 
   form: FormGroup;
   categories = ExpenseCategory;
+  shoulDisplayCategorySelect = true;
 
   get isStartDateValid(): boolean {
     return this.form.controls.startDate.valid;
@@ -33,6 +36,7 @@ export class FiltersFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
+      type: [this.filters.type, [Validators.required]],
       startDate: [this.filters.startDate, Validators.required],
       endDate: [this.filters.endDate, Validators.required],
       category: [this.filters.category]
@@ -74,6 +78,14 @@ export class FiltersFormComponent implements OnInit {
     }
 
     return errorMsg;
+  }
+
+  onExpenseTypeChange(event: MatRadioChange): void {
+    if (event.value === FinanceTypeEnum.INCOME) {
+      this.shoulDisplayCategorySelect = false;
+    } else {
+      this.shoulDisplayCategorySelect = true;
+    }
   }
 
   submit(form: FormGroup): void {
