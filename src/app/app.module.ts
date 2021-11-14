@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { LayoutModule } from './layout/layout.module';
 import { ExpensesModule } from './features/expenses/expenses.module';
+import { DashboardModule } from './features/dashboard/dashboard.module';
 import { ViewsModule } from './views/views.module';
 
 import { AngularFireModule } from '@angular/fire';
@@ -33,6 +34,7 @@ import { AppComponent } from './app.component';
     LayoutModule,
     ExpensesModule,
     ViewsModule,
+    DashboardModule,
     AppRoutingModule
   ],
   providers: [],
