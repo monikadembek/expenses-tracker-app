@@ -1,21 +1,7 @@
 <p>Dashboard</p>
 <div class="dashboard">
   <div class="dashboard__item">
-    <ngx-charts-bar-horizontal
-      [scheme]="chart.options.colorScheme"
-      [results]="chart.data"
-      [gradient]="chart.options.gradient"
-      [xAxis]="chart.options.showXAxis"
-      [yAxis]="chart.options.showYAxis"
-      [legend]="chart.options.showLegend"
-      [legendPosition]="chart.options.legendPosition"
-      [showXAxisLabel]="chart.options.showXAxisLabel"
-      [showYAxisLabel]="chart.options.showYAxisLabel"
-      [xAxisLabel]="chart.options.xAxisLabel"
-      [yAxisLabel]="chart.options.yAxisLabel"
-      (select)="onSelect($event)"
-    >
-    </ngx-charts-bar-horizontal>
+    <app-graph-tile [chart]="chart" [title]="title"></app-graph-tile>
   </div>
   <div class="dashboard__item">
     <strong>Stats for current month</strong><br>
@@ -24,6 +10,3 @@
     Total left: 3001zł<br>
   </div>
 </div>
-    
-
-      

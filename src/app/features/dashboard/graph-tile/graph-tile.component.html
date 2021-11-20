@@ -1,0 +1,18 @@
+<div>
+  <h2>{{ title }}</h2>
+  <ngx-charts-bar-horizontal
+    [scheme]="chart.options.colorScheme"
+    [results]="chart.data"
+    [gradient]="chart.options.gradient"
+    [xAxis]="chart.options.showXAxis"
+    [yAxis]="chart.options.showYAxis"
+    [legend]="chart.options.showLegend"
+    [legendPosition]="chart.options.legendPosition"
+    [showXAxisLabel]="chart.options.showXAxisLabel"
+    [showYAxisLabel]="chart.options.showYAxisLabel"
+    [xAxisLabel]="chart.options.xAxisLabel"
+    [yAxisLabel]="chart.options.yAxisLabel"
+    (select)="onSelect($event)"
+  >
+  </ngx-charts-bar-horizontal>
+</div>

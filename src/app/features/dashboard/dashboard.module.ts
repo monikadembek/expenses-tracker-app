@@ -6,9 +6,10 @@ import { MaterialModule } from '../../material/material.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { DashboardContainerComponent } from './dashboard-container/dashboard-container.component';
+import { GraphTileComponent } from './graph-tile/graph-tile.component';
 
 @NgModule({
-  declarations: [DashboardContainerComponent],
+  declarations: [DashboardContainerComponent, GraphTileComponent],
   imports: [
     CommonModule,
     NgxChartsModule,
