@@ -1,5 +1,4 @@
-import { FinanceTypeEnum } from './Expense';
-import { ExpenseCategory } from './ExpenseCategory';
+import { FinanceTypeEnum, ExpenseCategory } from '../../../core/models/Expense';
 
 export interface Filters {
   type: 'all' | FinanceTypeEnum;

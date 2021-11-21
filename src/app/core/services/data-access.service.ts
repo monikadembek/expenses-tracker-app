@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { from, Observable, of } from 'rxjs';
 import { catchError, map, tap, first } from 'rxjs/operators';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
-import { Expense } from '../../features/expenses/models/Expense';
-import { ExpensesStore } from 'src/app/features/expenses/services/expenses-store';
+import { Expense } from '../models/Expense';
+import { ExpensesStore } from '../services/expenses-store';
 
 @Injectable({
   providedIn: 'root'

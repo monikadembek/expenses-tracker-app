@@ -5,8 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SnackbarMessageType } from 'src/app/shared/shared-models';
 import { SnackbarService } from 'src/app/shared/snackbar.service';
-import { Expense, FinanceTypeEnum } from '../models/Expense';
-import { ExpenseCategory } from '../models/ExpenseCategory';
+import { Expense, FinanceTypeEnum, ExpenseCategory } from '../../../core/models/Expense';
 import { ExpensesService } from '../services/expenses.service';
 
 @Component({

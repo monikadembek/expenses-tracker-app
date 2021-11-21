@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatRadioChange } from '@angular/material/radio';
 import { Filters } from '../models/Filters';
-import { ExpenseCategory } from '../models/ExpenseCategory';
-import { FinanceTypeEnum } from '../models/Expense';
+import { ExpenseCategory, FinanceTypeEnum } from '../../../core/models/Expense';
 
 @Component({
   selector: 'filters-form',

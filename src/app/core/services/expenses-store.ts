@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Store } from '../../../core/store/store';
+import { Store } from '../../core/store/store';
 import { ExpensesState } from './expenses-state';
 
 @Injectable({

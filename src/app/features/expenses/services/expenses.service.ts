@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { from, Observable, of } from 'rxjs';
-import { Expense } from '../models/Expense';
+import { Expense } from '../../../core/models/Expense';
 import { DocumentReference } from '@angular/fire/firestore';
 import { AuthService } from '../../../auth/services/auth.service';
 import { DataAccessService } from '../../../core/services/data-access.service';
 import { concatMap, map, switchMap } from 'rxjs/operators';
-import { ExpensesStore } from './expenses-store';
-import { SnackbarService } from 'src/app/shared/snackbar.service';
-import { SnackbarMessageType } from 'src/app/shared/shared-models';
+import { ExpensesStore } from '../../../core/services/expenses-store';
+import { SnackbarService } from '../../../shared/snackbar.service';
+import { SnackbarMessageType } from '../../../shared/shared-models';
 
 @Injectable({
   providedIn: 'root'

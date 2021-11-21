@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { DialogService } from 'src/app/shared/services/dialog.service';
-import { Expense, FinanceTypeEnum } from '../models/Expense';
+import { Expense, FinanceTypeEnum } from '../../../core/models/Expense';
 import { Filters } from '../models/Filters';
 import { ExpensesService } from '../services/expenses.service';
 
